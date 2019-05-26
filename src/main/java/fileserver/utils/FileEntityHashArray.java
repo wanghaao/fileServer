@@ -54,10 +54,7 @@ public class FileEntityHashArray<K,V> extends HashMap<K,V> implements HashArrayO
     }
 
     public boolean whetherFull(){
-        if(counter==DEFAULT_SIZE){
-            return true;
-        }
-        return false;
+        return DEFAULT_SIZE == counter;
     }
 
     // 是否存在指定文件名称

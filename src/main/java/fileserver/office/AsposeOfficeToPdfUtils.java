@@ -78,9 +78,11 @@ public class AsposeOfficeToPdfUtils implements OfficeUtil{
             // pdf 到 png
 			PdfboxPdfToImageUtils.pdf2Image(pdfPath,imageDirectory,200,1);
 			log.info("ppt--pdf--png"); // 转化用时
-        } catch (Exception e) {
+        } catch (IOException e) {
 			log.info(e);
-        }finally {
+        } catch (Exception e) {
+            log.info(e);
+        } finally {
 			if(fileOS!=null){
 				try {
 					fileOS.close();
@@ -109,9 +111,11 @@ public class AsposeOfficeToPdfUtils implements OfficeUtil{
 			// pdf 到 png1
 			PdfboxPdfToImageUtils.pdf2Image(pdfPath,imageDirectory,200,1);
 			log.info("ppt--pdf--png:"); // 转化用时
-		} catch (Exception e) {
+		} catch (IOException e) {
 			log.info(e);
-		}finally {
+		} catch (Exception e) {
+            log.info(e);
+        } finally {
 			if(fileOS!=null){
 				try {
 					fileOS.close();
@@ -142,7 +146,7 @@ public class AsposeOfficeToPdfUtils implements OfficeUtil{
 			// pdf 到 png
 			PdfboxPdfToImageUtils.pdf2Image(pdfPath,imageDirectory,200,1);
 			log.info("ppt--pdf--png:"); // 转化用时
-		} catch (Exception e) {
+		} catch (IOException e) {
 			log.info(e);
 		}finally {
 			if(fileOS!=null){
