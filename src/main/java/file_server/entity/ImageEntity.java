@@ -3,9 +3,6 @@ package file_server.entity;
 
 public class ImageEntity extends FileEntity{
 
-//    private String imagePath;
-//    private String imageName;
-//    private String imageDataInBase64;
     public ImageEntity(String imagePath,String imageName,String imageDataInBase64) {
         super(imagePath,imageName,imageDataInBase64);
     }

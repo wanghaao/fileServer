@@ -9,7 +9,7 @@ import com.aspose.words.Document;
 import com.aspose.words.SaveFormat;
 
 public class NewTest {
-	
+
 	public static boolean getLicense() {
         boolean result = false;
         try {

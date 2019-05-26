@@ -3,6 +3,7 @@ package file_server.utils;
 import com.sun.jmx.snmp.Timestamp;
 import file_server.entity.FileEntity;
 import file_server.entity.ImageEntity;
+import org.apache.commons.logging.impl.SimpleLog;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
@@ -11,6 +12,9 @@ import java.util.Properties;
 
 public class FileProcessorUtils implements FileUtils{
 
+    private FileProcessorUtils() {
+    }
+    private static SimpleLog log = new SimpleLog("log");
     // 图片文件的  base64 编码
     public static FileEntity imageToDataInBase64(File file){
 
@@ -22,9 +26,16 @@ public class FileProcessorUtils implements FileUtils{
             inputStream = new FileInputStream(file);
             data = new byte[inputStream.available()];
             inputStream.read(data);
-            inputStream.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.info(e);
+        }finally {
+            if (inputStream!=null){
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    log.info(e);
+                }
+            }
         }
 
         // 加密
@@ -37,6 +48,7 @@ public class FileProcessorUtils implements FileUtils{
         if (imgStr == null)
             return false;
         BASE64Decoder decoder = new BASE64Decoder();
+        OutputStream out = null;
         try {
             // 解密
             byte[] b = decoder.decodeBuffer(imgStr);
@@ -46,13 +58,20 @@ public class FileProcessorUtils implements FileUtils{
                     b[i] += 256;
                 }
             }
-            OutputStream out = new FileOutputStream(filePath);
+            out = new FileOutputStream(filePath);
             out.write(b);
             out.flush();
-            out.close();
             return true;
         } catch (Exception e) {
             return false;
+        }finally {
+            if (out!=null){
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    log.info(e);
+                }
+            }
         }
     }
 
@@ -65,12 +84,10 @@ public class FileProcessorUtils implements FileUtils{
     public static String getTheFilePathFromPropertiesFile(String fileDirectoryKey){
         Properties properties = new Properties();
         try {
-//            properties.load(new FileInputStream("/classes/properties/filesDirectory.properties"));
-
             properties.load(new FileInputStream(FileProcessorUtils.class.getResource("/").getPath()+"/properties/filesDirectory.properties"));
 
         } catch (IOException e) {
-            e.printStackTrace();
+            log.info(e);
         }
         return properties.getProperty(fileDirectoryKey);
     }
@@ -83,10 +100,10 @@ public class FileProcessorUtils implements FileUtils{
     public static String getAbsoluteFileName(String depository){
         String[] arr = depository.split("\\\\");
         int len = arr.length;
-        String name = "";
+        StringBuilder name = new StringBuilder();
         for (int i = 2 ; i < len-1 ; i++){
-            name += arr[i]+"-";
+            name.append(arr[i]+"-");
         }
-        return name;
+        return name.toString();
     }
 }

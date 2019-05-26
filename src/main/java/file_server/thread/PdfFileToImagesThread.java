@@ -12,7 +12,6 @@ public class PdfFileToImagesThread extends AbstractOfficeProcessThread {
     private File pdfFile;
 
     public PdfFileToImagesThread(String pdfFileName, String pdfFilePath, String toImagesDirectory, File pdfFile) {
-        //super(pdfFileName,pdfFilePath,toImagesDirectory,pdfFile);
         this.pdfFile = pdfFile;
         this.pdfFileName =pdfFileName;
         this.pdfFilePath = pdfFilePath;
@@ -24,7 +23,7 @@ public class PdfFileToImagesThread extends AbstractOfficeProcessThread {
         processOfficeFile();
     }
 
-    @Override
+
     public void processOfficeFile() {
         PdfboxPdfToImageUtils.pdf2Image(pdfFilePath,toImagesDirectory,300,0);
     }

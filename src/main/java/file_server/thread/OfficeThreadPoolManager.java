@@ -9,7 +9,6 @@ public class OfficeThreadPoolManager {
 
     public void commitThread(AbstractOfficeProcessThread processThread){
         threadPoolExecutor.submit(processThread);
-        //System.out.println(threadPoolExecutor.getPoolSize());
     }
 
     public int poolState(){

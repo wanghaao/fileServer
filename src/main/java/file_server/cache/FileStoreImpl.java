@@ -1,22 +1,19 @@
 package file_server.cache;
 
 import file_server.utils.FileProcessorUtils;
+import org.apache.commons.logging.impl.SimpleLog;
 
 import java.io.*;
 
 public class FileStoreImpl implements FileStore {
 
     private OfficeFileFormatConversion fileFormatConversion = new OfficeFileFormatConversion();
-//    private OfficeFileFormatConversion fileFormatConversion;
-//    @Resource(name = "officeFileFormatConversion")
-//    public void setFileFormatConversion(OfficeFileFormatConversion fileFormatConversion) {
-//        this.fileFormatConversion = fileFormatConversion;
-//    }
+
     private static FileCacheImpl fileCache = new FileCacheImpl();
+    private SimpleLog log = new SimpleLog("log");
 
     private String getFileStoreDirectory(String fileFormatTag){
-        String toDirectory = FileProcessorUtils.getTheFilePathFromPropertiesFile(fileFormatTag);
-        return toDirectory;
+        return FileProcessorUtils.getTheFilePathFromPropertiesFile(fileFormatTag);
     }
 
     /**
@@ -25,20 +22,18 @@ public class FileStoreImpl implements FileStore {
      * @return
      */
     public String storeFileToDisk(File file){
-        String suffix = file.getName().substring(file.getName().lastIndexOf(".")+1);
+        String suffix = file.getName().substring(file.getName().lastIndexOf('.')+1);
         if (suffix.equals("jpg") || suffix.equals("png") || suffix.equals("bmp")){
             String toDirectory = getFileStoreDirectory("allImagesDirectory");
             storeImageFileToDisk(toDirectory,file);
             return toDirectory+file.getName();
         }else if(suffix.equals("pdf")){
             String toDirectory = getFileStoreDirectory("allImagesDirectory");
-            String path = storePdfFileToDisk(toDirectory,file);
-            return path;
+            return storePdfFileToDisk(toDirectory,file);
         }else {
             // 也存到一个 固定的 文件夹下面
-            String toDirectory = file.getPath().substring(0,file.getPath().lastIndexOf("\\"));
-            String filePathList = storeOfficeFileToDisk(toDirectory,file);
-            return filePathList;
+            String toDirectory = file.getPath().substring(0,file.getPath().lastIndexOf('\\'));
+            return storeOfficeFileToDisk(toDirectory,file);
         }
     }
 
@@ -47,22 +42,37 @@ public class FileStoreImpl implements FileStore {
     public String storeImageFileToDisk(String toDirectory,File file) {
         String absoluteFileName = file.getPath().substring(12).replaceAll("\\\\","-");
         // 绝对路径的 后面 的所有作为 文件名
-        System.out.println("转存到固定文件夹，并更改文件名为:" + absoluteFileName);
+        log.info("转存到固定文件夹，并更改文件名为:" + absoluteFileName);
+        FileOutputStream fos = null;
+        FileInputStream fis = null;
         try {
-            FileOutputStream fos = new FileOutputStream(new File(toDirectory +"\\"+ absoluteFileName));
-            FileInputStream fis = new FileInputStream(file);
+            fos = new FileOutputStream(new File(toDirectory +File.separator+ absoluteFileName));
+            fis = new FileInputStream(file);
 
             byte[] bytes = new byte[1024 * 1024];
             int len=0;
             while((len=fis.read(bytes))!=-1){
                 fos.write(bytes, 0, len);
             }
-            fis.close();
-            fos.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.info(e);
+        }finally {
+            if (fis!=null){
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    log.info(e);
+                }
+            }
+            if (fos!=null){
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    log.info(e);
+                }
+            }
         }
-        File file1 = new File(toDirectory +"\\"+ absoluteFileName);
+        File file1 = new File(toDirectory +File.separator+ absoluteFileName);
         addRecord(file1);
         return toDirectory;
     }
@@ -75,14 +85,6 @@ public class FileStoreImpl implements FileStore {
     @Override
     public String storePdfFileToDisk(String toDirectory, File file) {
         return fileFormatConversion.processPdfFile(file,toDirectory);
-    }
-
-    /*
-     * @return 写入disk后返回到 缓存中的链接记录
-     */
-    public String insertIntoCacheRecord(){
-
-        return "";
     }
 
     public static void addRecord(File file){

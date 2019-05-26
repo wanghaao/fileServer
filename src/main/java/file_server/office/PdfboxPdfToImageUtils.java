@@ -8,18 +8,20 @@ import javax.imageio.ImageIO;
 
 import file_server.cache.FileCacheImpl;
 import file_server.utils.FileProcessorUtils;
+import org.apache.commons.logging.impl.SimpleLog;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
 
 import com.lowagie.text.pdf.PdfReader;
 
 public class PdfboxPdfToImageUtils implements OfficeUtil {
-//    public static void main(String[] args) {
-//        pdf2Image("E:\\Documents\\Desktop\\officeToDirectory\\123.pdf", "E:\\Documents\\Desktop\\officeToDirectory\\", 300);
-//    }
+
+    private PdfboxPdfToImageUtils() {
+    }
+    private static SimpleLog log = new SimpleLog("log");
+
     private static FileCacheImpl fileCache = new FileCacheImpl();
     // page 值应该是针对每一个线程是唯一的，所以在工具类里面是不可以的
-    private int pageNumber = 0;
     /***
      * PDF文件转PNG图片，全部页数
      * @param PdfFilePath pdf完整路径
@@ -29,7 +31,7 @@ public class PdfboxPdfToImageUtils implements OfficeUtil {
      */
     public static void pdf2Image(String PdfFilePath, String dstImgFolder, int dpi,int tag) {
 
-        System.out.println(PdfFilePath + " ------ " + dstImgFolder);
+        log.info(PdfFilePath + " ------ " + dstImgFolder);
         File file = new File(PdfFilePath);
         try {
             String imgPDFPath = file.getParent();
@@ -50,11 +52,11 @@ public class PdfboxPdfToImageUtils implements OfficeUtil {
                 /* dpi越大转换后越清晰，相对转换速度越慢 */
                 PdfReader reader = new PdfReader(PdfFilePath);
                 int pages = reader.getNumberOfPages();
-                StringBuffer imgFilePath = null;
+                StringBuilder imgFilePath = null;
                 for (int i = 0; i < pages; i++) {
                     String imgFilePathPrefix = imgFolderPath + File.separator + FileProcessorUtils.getAbsoluteFileName(PdfFilePath) + imagePDFName;
 
-                    imgFilePath = new StringBuffer();
+                    imgFilePath = new StringBuilder();
                     imgFilePath.append(imgFilePathPrefix);
                     imgFilePath.append("_");
                     imgFilePath.append(String.valueOf(i + 1));
@@ -67,14 +69,14 @@ public class PdfboxPdfToImageUtils implements OfficeUtil {
                 }
                 reader.close();
                 pdDocument.close();
-                System.out.println("PDF--PNG: "+PdfFilePath+" success!");
+                log.info("PDF--PNG: "+PdfFilePath+" success!");
 
             } else {
-                System.out.println("PDF--PNG: " + " create " + imgFolderPath + " failed.");
+                log.info("PDF--PNG: " + " create " + imgFolderPath + " failed.");
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            log.info(e);
         }
         if(tag==1){
             file.delete();
@@ -90,17 +92,6 @@ public class PdfboxPdfToImageUtils implements OfficeUtil {
         }
     }
 
-    public static int calculatePageNumber(File pdfFile){
-        PdfReader reader = null;
-        try {
-            reader = new PdfReader(pdfFile.getPath());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        int pages = reader.getNumberOfPages();
-        reader.close();
-        return pages;
-    }
     public static void addRecord(File file){
         fileCache.recallAddRecord(file);
     }

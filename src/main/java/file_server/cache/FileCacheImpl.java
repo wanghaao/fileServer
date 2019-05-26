@@ -4,10 +4,12 @@ import file_server.entity.FileEntity;
 import file_server.exception.CacheRequestException;
 import file_server.utils.FileEntityHashArray;
 import file_server.utils.FileProcessorUtils;
+import org.apache.commons.logging.impl.SimpleLog;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.util.HashMap;
+
 
 public class FileCacheImpl implements FileCache {
     // 自己的数据结构
@@ -16,15 +18,11 @@ public class FileCacheImpl implements FileCache {
     private static HashMap<String,FileListNode> allFilesRecords = new HashMap<String, FileListNode>();
 
     private FileStoreImpl fileStoreImpl = new FileStoreImpl();
-//    private FileStoreImpl fileStoreImpl;
-//    @Resource(name = "fileStoreImpl")
-//    public void setFileStoreImpl(FileStoreImpl fileStoreImpl) {
-//        this.fileStoreImpl = fileStoreImpl;
-//    }
+
+    private SimpleLog log = new SimpleLog("log");
 
     private static String allImagesDirectory  = "";
-    public FileCacheImpl() {
-    }
+
     // 仅一次
     static {
         initialCache();
@@ -78,7 +76,6 @@ public class FileCacheImpl implements FileCache {
                 return exchangeEntityFromCache(fileName, reloadFromMemory(fileName));
             }
         }else {
-            //return null;
             throw new CacheRequestException("The requested resource is not in the memory!");
         }
     }
@@ -109,32 +106,33 @@ public class FileCacheImpl implements FileCache {
         String imagePath = fileStoreImpl.storeFileToDisk(imageFile);
         addToList(imagePath);
         int capacity = fileEntityHashArray.getElementNumber();
-        return imagePath;
+        return imagePath+":"+capacity;
     }
-    /*
-    存office的，图片路径在存储后不直接添加到 缓存链表
+
+    /**
+     * 存office的，图片路径在存储后不直接添加到 缓存链表
+     * @param officeFile
+     * @param path
+     * @return
      */
-    public String storeNewFile(File officeFile,String path){
-        String officePathList = fileStoreImpl.storeFileToDisk(officeFile);
-        return officePathList;
+    public String storeNewImageFile(File officeFile){
+        return fileStoreImpl.storeFileToDisk(officeFile);
     }
 
     /**
      * 存 一般文件
      * @param commonFile
-     * @param nos
      * @return
      */
-    public String storeNewFile(MultipartFile commonFile, String path, String nos){
+    public String storeNewFile(MultipartFile commonFile, String path){
         File dest = new File(path);
         try {
             commonFile.transferTo(dest);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.info("context",e);
         }
         // 先存 在仓库，再转存到一个固定文件夹做 缓存 操作
-        String paths = fileStoreImpl.storeFileToDisk(dest);
-        return paths;
+        return fileStoreImpl.storeFileToDisk(dest);
     }
 
     public void recallAddRecord(File file){

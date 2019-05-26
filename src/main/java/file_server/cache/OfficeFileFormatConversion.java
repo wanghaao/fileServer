@@ -1,10 +1,10 @@
 package file_server.cache;
 
-import file_server.office.PdfboxPdfToImageUtils;
 import file_server.thread.OfficeThreadPoolManager;
 import file_server.thread.PWXFileToPdfThread;
 import file_server.thread.PdfFileToImagesThread;
 import file_server.utils.FileUtils;
+import org.apache.commons.logging.impl.SimpleLog;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -16,13 +16,10 @@ public class OfficeFileFormatConversion implements FileFormatConversion, FileUti
 
     private static OfficeThreadPoolManager officeThreadPoolManager = new OfficeThreadPoolManager();
     private static int pageNumber = 0;
-
-    static {
-    }
+    private SimpleLog log = new SimpleLog("log");
 
     public OfficeFileFormatConversion() {
         // 预加载
-        //initialLoadOffice();
     }
     /**
      * 预加载 office 为 pdf ，pdf - png
@@ -66,13 +63,11 @@ public class OfficeFileFormatConversion implements FileFormatConversion, FileUti
      * @return 返回pdf文件转为 images 后的 文件夹 + 页数
      */
     public String processOfficeFile(File file, String toDirectory) {
-        String pdfFilePath = officeToPdfByThreadPool(file, toDirectory);
-        return pdfFilePath;
+        return officeToPdfByThreadPool(file, toDirectory);
     }
 
     public String processPdfFile(File file,String toDirectory){
-        String imagePath = pdfToImagesByThreadPool(file,toDirectory);
-        return imagePath;
+        return pdfToImagesByThreadPool(file,toDirectory);
     }
     /**
      * 扫描本地的 office 文件 -- pdf
@@ -84,7 +79,7 @@ public class OfficeFileFormatConversion implements FileFormatConversion, FileUti
             properties.load(new FileInputStream(OfficeFileFormatConversion.class.getResource("/").getPath()+"/properties/filesDirectory.properties"));
 
         } catch (IOException e) {
-            e.printStackTrace();
+            log.info(e);
         }
         String officeFromDirectory = properties.getProperty("allOfficeFilesDirectory");
         List<String> filePaths = getAllOfficeFilesPath(officeFromDirectory);
@@ -93,7 +88,7 @@ public class OfficeFileFormatConversion implements FileFormatConversion, FileUti
 
         for (String path : filePaths) {
             File file = new File(path);
-            String pdfFilePath = officeToPdfByThreadPool(file, pdfDirectory);
+            officeToPdfByThreadPool(file, pdfDirectory);
         }
     }
 
@@ -104,12 +99,10 @@ public class OfficeFileFormatConversion implements FileFormatConversion, FileUti
      */
     private String officeToPdfByThreadPool(File file, String toDirectory) {
         String fileName = file.getName();
-//        String suffix = fileName.substring(fileName.lastIndexOf(".")+1);
-//        System.out.println("officeToPdfByThreadPool : " +file.getPath() +" : " + fileName + " : " +  suffix);
         // 通过线程池的方式 -- office 的线程池
         PWXFileToPdfThread officeThread = new PWXFileToPdfThread(fileName, file.getPath(), file, toDirectory);
         officeThreadPoolManager.commitThread(officeThread);
-        return toDirectory + "\\" + fileName.substring(0, fileName.lastIndexOf(".")) + ".pdf";
+        return toDirectory + "\\" + fileName.substring(0, fileName.lastIndexOf('.')) + ".pdf";
     }
 
 
@@ -122,9 +115,8 @@ public class OfficeFileFormatConversion implements FileFormatConversion, FileUti
         Properties properties = new Properties();
         try {
             properties.load(new FileInputStream(OfficeFileFormatConversion.class.getResource("/").getPath()+"/properties/filesDirectory.properties"));
-            //properties.load(new FileInputStream("src/main/resources/properties/filesDirectory.properties"));
         } catch (IOException e) {
-            e.printStackTrace();
+            log.info(e);
         }
         String pdfFromDirectory = properties.getProperty("allPdfFilesDirectory");
         String imageToDirectory = properties.getProperty("allImagesDirectory");
@@ -152,26 +144,12 @@ public class OfficeFileFormatConversion implements FileFormatConversion, FileUti
         // 通过线程池的方式 -- office 的线程池
         officeThreadPoolManager.commitThread(imagesThread);
 
-        //return toImageDirectory + pageNumberOfPdf(pdfFile);
         return toImageDirectory;
     }
 
-    public int pageNumberOfPdf(File pdfFile) {
-        return PdfboxPdfToImageUtils.calculatePageNumber(pdfFile);
-    }
-
-    /*
-    给不在提供的几种 文件格式里面的文件，提供的一个重写接口，只需要覆盖就可以了。
-     */
-    public static void processOtherOfficeFile(File file) {
-
-    }
 
     public int getPageNumber() {
         return pageNumber;
     }
 
-    public void setPageNumber(int pageNumber) {
-        this.pageNumber = pageNumber;
-    }
 }

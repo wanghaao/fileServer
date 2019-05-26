@@ -11,7 +11,7 @@ import java.util.Set;
 public class FileEntityHashArray<K,V> extends HashMap<K,V> implements HashArrayOperation {
 
     // 数组存放的是  文件实体类 ,用的是  泛型，实际是  fileEntity
-    private FileEntity[] array;
+    private transient FileEntity[] array;
     private volatile int counter = 0;
     static final int defaultSize = 128;
 
@@ -20,10 +20,13 @@ public class FileEntityHashArray<K,V> extends HashMap<K,V> implements HashArrayO
         return super.equals(o);
     }
 
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 
     static final int hash(Object key) {
-        int h;
-        return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
+        return (key == null) ? 0 : (key.hashCode()) ^ (key.hashCode() >>> 16);
     }
 
     static final int determineIndex(int hashcode,int size){
@@ -45,14 +48,13 @@ public class FileEntityHashArray<K,V> extends HashMap<K,V> implements HashArrayO
             array[index] = (FileEntity) value;
             counter++;// 真实的填上了空格
         }else{
-            FileEntity fileEntity = array[index];
             array[index] = (FileEntity) value;
         }
         return value;
     }
 
     public boolean whetherFull(){
-        return counter == defaultSize ? true:false;
+        return counter==defaultSize ? true:false;
     }
 
     // 是否存在指定文件名称
@@ -63,7 +65,7 @@ public class FileEntityHashArray<K,V> extends HashMap<K,V> implements HashArrayO
 
     @Override
     public Set<String> arrayKeySet() {
-        return null;
+        return (Set<String>) super.keySet();
     }
 
     @Override
@@ -78,6 +80,6 @@ public class FileEntityHashArray<K,V> extends HashMap<K,V> implements HashArrayO
 
     @Override
     public Set<Object> arrayValueSet() {
-        return null;
+        return (Set<Object>) super.values();
     }
 }

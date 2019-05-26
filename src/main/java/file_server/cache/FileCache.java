@@ -12,7 +12,6 @@ public interface FileCache {
      * @return
      */
     public boolean hashArrayExistCache(String fileName);
-
     /**
      * 是否存在 这一个 记录
      * @param fileName

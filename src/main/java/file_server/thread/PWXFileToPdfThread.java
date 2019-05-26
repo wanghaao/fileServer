@@ -1,6 +1,7 @@
 package file_server.thread;
 
 import file_server.office.AsposeOfficeToPdfUtils;
+import org.apache.commons.logging.impl.SimpleLog;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,6 +9,8 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class PWXFileToPdfThread extends AbstractOfficeProcessThread implements Runnable {
+
+    private SimpleLog log = new SimpleLog("log");
 
     private String officeFileName;
     private String officePath;
@@ -21,26 +24,25 @@ public class PWXFileToPdfThread extends AbstractOfficeProcessThread implements R
 
 
     public void processOfficeFile() {
-        String pdfFileName = officeFileName.substring(0,officeFileName.lastIndexOf("."))+".pdf";
+        String pdfFileName = officeFileName.substring(0,officeFileName.lastIndexOf('.'))+".pdf";
 
-        String pdfPath = toPdfDirectory+"\\" +pdfFileName;
-        System.out.println("Thread : " + Thread.currentThread().getName() + " 转换 ： " + officePath + " 到 : " + pdfPath);
+        String pdfPath = toPdfDirectory+File.separator +pdfFileName;
+        log.info("Thread : " + Thread.currentThread().getName() + " 转换 ： " + officePath + " 到 : " + pdfPath);
 
         Properties properties = new Properties();
         try {
             properties.load(new FileInputStream(PWXFileToPdfThread.class.getResource("/").getPath()+"/properties/filesDirectory.properties"));
         } catch (IOException e) {
-            e.printStackTrace();
+            log.info(e);
         }
         String imageDirectory = properties.getProperty("allImagesDirectory");
         try {
             AsposeOfficeToPdfUtils.OfficesToPdf(officePath,pdfPath,imageDirectory);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.info(e);
         }
     }
     public PWXFileToPdfThread(String officeFileName, String officePath, File officeFile, String toPdfDirectory) {
-        //super(officeFileName,officePath,toPdfDirectory,officeFile);
         this.officeFileName = officeFileName;
         this.officeFile = officeFile;
         this.officePath = officePath;

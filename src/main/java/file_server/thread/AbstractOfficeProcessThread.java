@@ -1,25 +1,15 @@
 package file_server.thread;
 
 
+import org.apache.commons.logging.impl.SimpleLog;
+
+
 public class AbstractOfficeProcessThread implements Runnable {
-//    private String fileName;
-//    private String filePath;
-//    private String toDirectory;
-//    private File file;
-//
-//    public AbstractOfficeProcessThread(String fileName, String filePath, String toDirectory, File file) {
-//        this.fileName = fileName;
-//        this.filePath = filePath;
-//        this.toDirectory = toDirectory;
-//        this.file = file;
-//    }
+
+    private SimpleLog log = new SimpleLog("log");
 
     @Override
     public void run() {
-        processOfficeFile();
-    }
-
-    public void processOfficeFile(){
-
+        log.info("abstractOfficeProcessThread");
     }
 }

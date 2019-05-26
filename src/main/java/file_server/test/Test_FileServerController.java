@@ -3,11 +3,13 @@ package file_server.test;
 import file_server.cache.FileCacheImpl;
 import file_server.cache.OfficeFileFormatConversion;
 import file_server.controller.FileReceiverImpl;
+import org.apache.commons.logging.impl.SimpleLog;
 import org.junit.Test;
 
 import java.io.File;
 
 public class Test_FileServerController {
+    private SimpleLog log = new SimpleLog("log");
 
     @Test
     public void test_UploadImageAndOffices(){
@@ -24,7 +26,7 @@ public class Test_FileServerController {
 
     @Test
     public void test_get_PPT_File_ImageFormatInBase64(){
-
+        log.info("wanghao");
     }
 
     @Test

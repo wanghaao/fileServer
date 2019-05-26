@@ -3,6 +3,7 @@ package file_server.controller;
 import file_server.cache.FileCacheImpl;
 import file_server.utils.DataToJsonUtils;
 import file_server.utils.FileProcessorUtils;
+import org.apache.commons.logging.impl.SimpleLog;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,12 +21,15 @@ import java.util.List;
 @Controller("fileReceiverImpl")
 public class FileReceiverImpl extends AbstractFileReceiver{
 
-      //private static FileCacheImpl fileCacheImpl  = new FileCacheImpl();
-//    private FileCacheImpl fileCacheImpl;
-//    @Resource(name = "fileCacheImpl")
-//    public void setFileCacheImpl(FileCacheImpl fileCacheImpl) {
-//        this.fileCacheImpl = fileCacheImpl;
-//    }
+    private SimpleLog log = new SimpleLog("log");
+    private String mainDirectory;
+
+    public String getMainDirectory() {
+        if (mainDirectory==null){
+            mainDirectory = FileProcessorUtils.getTheFilePathFromPropertiesFile("allFilesDirectory");
+        }
+        return mainDirectory;
+    }
 
     /**
      * 上传 office文件  和 各种 图片文件
@@ -39,16 +43,12 @@ public class FileReceiverImpl extends AbstractFileReceiver{
         FileCacheImpl fileCacheImpl  = new FileCacheImpl();
         // 获取文件名
         String fileName = file.getOriginalFilename();
-        System.out.println(fileName);
         // 获取文件后缀
-        //String prefix = fileName.substring(fileName.lastIndexOf(".")+1);
-        String mainDirectory = FileProcessorUtils.getTheFilePathFromPropertiesFile("allFilesDirectory");
+        String storePath = getMainDirectory() +File.separator+ path +File.separator+ fileName;
 
-        String storePath = mainDirectory +"\\"+ path +"\\"+ fileName;
-
-        System.out.println("存储路径: "+ storePath);
+        log.info("存储路径: "+ storePath);
         // 存储在disk  ,插入 到 cache记录
-        fileCacheImpl.storeNewFile(file,storePath,"common");
+        fileCacheImpl.storeNewFile(file,storePath);
         return "1";// 硬盘的真实文件名
     }
 
@@ -61,8 +61,7 @@ public class FileReceiverImpl extends AbstractFileReceiver{
     @ResponseBody
     public String createDepository(@Param("depository") String depository ) {
 
-        String mainDirectory = FileProcessorUtils.getTheFilePathFromPropertiesFile("allFilesDirectory");
-        String depositoryDirectory = mainDirectory+ "\\" + depository;
+        String depositoryDirectory = getMainDirectory()+ File.separator + depository;
         File dir = new File(depositoryDirectory);
         if (!dir.exists()) {
             dir.mkdirs();
@@ -80,8 +79,7 @@ public class FileReceiverImpl extends AbstractFileReceiver{
     @RequestMapping(value = "/create/directory",method = RequestMethod.POST)
     @ResponseBody
     public String createDirectory(@Param("directories") String directories,@Param("newDirectory")String newDirectory ) {
-        String mainDirectory = FileProcessorUtils.getTheFilePathFromPropertiesFile("allFilesDirectory");
-        String depositoryDirectory = mainDirectory+"\\" + directories +"\\"+ newDirectory;
+        String depositoryDirectory = getMainDirectory()+ File.separator + directories + File.separator + newDirectory;
         File dir = new File(depositoryDirectory);
         if (!dir.exists()) {
             dir.mkdirs();
@@ -99,8 +97,7 @@ public class FileReceiverImpl extends AbstractFileReceiver{
     @RequestMapping(value = "/search/directory",method = RequestMethod.POST)
     @ResponseBody
     public String searchDirectory(@Param("directories") String directories) {
-        String mainDirectory = FileProcessorUtils.getTheFilePathFromPropertiesFile("allFilesDirectory");
-        String directory = mainDirectory +"\\"+ directories;
+        String directory = getMainDirectory() +"\\"+ directories;
         File file = new File(directory);
         List<String> list = new ArrayList<String>();
         if(file.exists()) {
@@ -121,31 +118,58 @@ public class FileReceiverImpl extends AbstractFileReceiver{
      */
     @RequestMapping(value = "/download/commonFile",method = RequestMethod.POST)
     @ResponseBody
-    public void downloadFile(@Param("filePath") String filePath, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void downloadFile(@Param("filePath") String filePath, HttpServletRequest request, HttpServletResponse response) {
         response.addHeader("Access-Control-Allow-Origin","*");
         response.addHeader("Access-Control-Allow-Methods","POST");
         response.addHeader("Access-Control-Allow-Headers","x-requested-with,content-type");
 
-        String mainDirectory = FileProcessorUtils.getTheFilePathFromPropertiesFile("allFilesDirectory");
-        String absolutePath = mainDirectory +"\\"+ filePath;
+        String absolutePath = getMainDirectory() +File.separator+ filePath;
         File file = new File(absolutePath);
         //获取输入流
-        InputStream bis = new BufferedInputStream(new FileInputStream(file));
-        //假如以中文名下载的话 
-        String filename = file.getName();
-        //转码，免得文件名中文乱码
-        filename = URLEncoder.encode(filename, "UTF-8");
-        //设置文件下载头  
-        response.addHeader("Content-Disposition", "attachment;filename=" + filename);
-        //1.设置文件ContentType类型，这样设置，会自动判断下载文件类型    
-        response.setContentType("multipart/form-data");
-        BufferedOutputStream out = new BufferedOutputStream(response.getOutputStream());
-        int len = 0;
-        while ((len = bis.read()) != -1) {
-            out.write(len);
-            out.flush();
+        BufferedInputStream bis = null;
+        BufferedOutputStream out = null;
+        try {
+            bis = new BufferedInputStream(new FileInputStream(file));
+            //假如以中文名下载的话 
+            String filename = file.getName();
+            //转码，免得文件名中文乱码
+            filename = URLEncoder.encode(filename, "UTF-8");
+            //设置文件下载头  
+            response.addHeader("Content-Disposition", "attachment;filename=" + filename);
+            //1.设置文件ContentType类型，这样设置，会自动判断下载文件类型    
+            response.setContentType("multipart/form-data");
+            out = new BufferedOutputStream(response.getOutputStream());
+            int len = 0;
+            while ((len = bis.read()) != -1) {
+                out.write(len);
+                out.flush();
+            }
+            out.close();
+            bis.close();
+        } catch (FileNotFoundException e) {
+            log.info(e);
+        } catch (UnsupportedEncodingException e) {
+            log.info(e);
+        } catch (IOException e) {
+            log.info(e);
+        }finally {
+            if(bis!=null){
+                try {
+                    bis.close();
+                } catch (IOException e) {
+                    log.info(e);
+                }
+            }
+            if (out!=null){
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    log.info(e);
+                }
+            }
+
         }
-        out.close();
+
     }
 
     /**
@@ -159,15 +183,15 @@ public class FileReceiverImpl extends AbstractFileReceiver{
     public String getImageDataInBase64(@Param("path") String path,@Param("tag") String tag){
         FileCacheImpl fileCacheImpl  = new FileCacheImpl();
         String realFileName = path.replaceAll("/","-");
-        System.out.println(path + "--------"+realFileName);
+        log.info(path + "--------"+realFileName);
         if(tag.equals("image")){
             return fileCacheImpl.getSpecialFile(realFileName).getFileData();
         }else if(tag.equals("office")){
             // office 的 文件夹
-            String officeDirectory = realFileName.substring(realFileName.lastIndexOf("-")+1,realFileName.indexOf("."));
-            String officeImagesDirectory = FileProcessorUtils.getTheFilePathFromPropertiesFile("allImagesDirectory") +"\\"+ officeDirectory;
+            String officeDirectory = realFileName.substring(realFileName.lastIndexOf('.')+1,realFileName.indexOf('.'));
+            String officeImagesDirectory = getMainDirectory() + File.separator + officeDirectory;
 
-            System.out.println(officeImagesDirectory);
+            log.info(officeImagesDirectory);
             File file = new File(officeImagesDirectory);
             List<String> imagesList = new ArrayList<String>();
             if (file.exists()){
@@ -184,12 +208,5 @@ public class FileReceiverImpl extends AbstractFileReceiver{
         }
     }
 
-    @RequestMapping(value = "/upload",method = RequestMethod.POST)
-    @ResponseBody
-    public String uploadImage(@Param("file") MultipartFile file ) {
-        System.out.println(file.getOriginalFilename());
-        System.out.println("545645645");
-        return "454646";
-    }
 
 }

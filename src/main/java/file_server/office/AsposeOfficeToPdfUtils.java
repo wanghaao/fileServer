@@ -1,29 +1,41 @@
 package file_server.office;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
+import java.io.*;
 
 import com.aspose.cells.Workbook;
 import com.aspose.slides.Presentation;
 import com.aspose.words.Document;
 import com.aspose.words.SaveFormat;
+import file_server.exception.CacheRequestException;
+import org.apache.commons.logging.impl.SimpleLog;
 
 public class AsposeOfficeToPdfUtils implements OfficeUtil{
 
+	private AsposeOfficeToPdfUtils() {
+	}
+	private static SimpleLog log = new SimpleLog("log");
+
 	public static boolean getLicense(String classPath) {
 		boolean result = false;
+		InputStream is = null;
         try {
-        	InputStream is = new FileInputStream(AsposeOfficeToPdfUtils.class.getResource("/").getPath()+"/office/license.xml");
+        	is = new FileInputStream(AsposeOfficeToPdfUtils.class.getResource("/").getPath()+"/office/license.xml");
             Class clazz = Class.forName(classPath);
             Object obj = clazz.newInstance();
             clazz.getMethod("setLicense", InputStream.class).invoke(obj, is);
             result = true;
             is.close();
         } catch (Exception e) {
-            e.printStackTrace();
-        }
+			log.info(e);
+        }finally {
+        	if(is!=null){
+				try {
+					is.close();
+				} catch (IOException e) {
+					log.info(e);
+				}
+			}
+		}
         return result;
 	}
 
@@ -42,7 +54,7 @@ public class AsposeOfficeToPdfUtils implements OfficeUtil{
 		} else if (filePath.endsWith("ppt") || filePath.endsWith("pptx")) {
 			pptToPDF(filePath, pdfPath,imageDirectory);
 		} else {
-			throw new RuntimeException("非word Office 文件");
+			throw new CacheRequestException("非word Office 文件");
 		}
 	}
 
@@ -57,7 +69,6 @@ public class AsposeOfficeToPdfUtils implements OfficeUtil{
             return;
         }
         try {
-            long old = System.currentTimeMillis();
             Document doc = new Document(wordPath);// 原始word路径
             File pdfFile = new File(pdfPath);// 输出路径
             FileOutputStream fileOS = new FileOutputStream(pdfFile);
@@ -65,10 +76,9 @@ public class AsposeOfficeToPdfUtils implements OfficeUtil{
 
             // pdf 到 png
 			PdfboxPdfToImageUtils.pdf2Image(pdfPath,imageDirectory,200,1);
-			long now = System.currentTimeMillis();
-			System.out.println("ppt--pdf--png: "+pdfPath+",cost time：" + ((now - old) / 1000.0) + " seconds."); // 转化用时
+			log.info("ppt--pdf--png"); // 转化用时
         } catch (Exception e) {
-            e.printStackTrace();
+			log.info(e);
         }
     }
 
@@ -82,7 +92,6 @@ public class AsposeOfficeToPdfUtils implements OfficeUtil{
 			return;
 		}
 		try {
-			long old = System.currentTimeMillis();
 			Workbook wb = new Workbook(filePath);// 原始excel路径
 			FileOutputStream fileOS = new FileOutputStream(new File(pdfPath));
 			wb.save(fileOS, com.aspose.cells.SaveFormat.PDF);
@@ -90,10 +99,9 @@ public class AsposeOfficeToPdfUtils implements OfficeUtil{
 
 			// pdf 到 png1
 			PdfboxPdfToImageUtils.pdf2Image(pdfPath,imageDirectory,200,1);
-			long now = System.currentTimeMillis();
-			System.out.println("ppt--pdf--png: "+",cost time：" + ((now - old) / 1000.0) + " seconds."); // 转化用时
+			log.info("ppt--pdf--png:"); // 转化用时
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.info(e);
 		}
 		
 	}
@@ -103,12 +111,11 @@ public class AsposeOfficeToPdfUtils implements OfficeUtil{
 	 * @param pdfPath
 	 * @throws Exception
 	 */
-	private static void pptToPDF(String filePath, String pdfPath,String imageDirectory) throws Exception {
+	private static void pptToPDF(String filePath, String pdfPath,String imageDirectory) {
 		if (!getLicense("com.aspose.slides.License")) { // 验证License 若不验证则转化出的pdf文档会有水印产生
 			return;
 		}
 		try {
-			long old = System.currentTimeMillis();
 			Presentation pres = new Presentation(filePath);
 			FileOutputStream fileOS = new FileOutputStream(new File(pdfPath));
 			pres.save(fileOS,com.aspose.slides.SaveFormat.Pdf);
@@ -116,10 +123,9 @@ public class AsposeOfficeToPdfUtils implements OfficeUtil{
 
 			// pdf 到 png
 			PdfboxPdfToImageUtils.pdf2Image(pdfPath,imageDirectory,200,1);
-			long now = System.currentTimeMillis();
-			System.out.println("ppt--pdf--png: "+",cost time：" + ((now - old) / 1000.0) + " seconds."); // 转化用时
+			log.info("ppt--pdf--png:"); // 转化用时
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.info(e);
 		}
 
 	}
