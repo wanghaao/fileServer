@@ -75,7 +75,7 @@ public class FileReceiverImplTest {
     @Test
     public void getImageDataInBase64() {
         fileReceiver.getImageDataInBase64("wang/aa.png","image");
-        fileReceiver.getImageDataInBase64("wang/aa.pdf","office");
+        fileReceiver.getImageDataInBase64("wang/aa.pdf", "office");
     }
 
 }

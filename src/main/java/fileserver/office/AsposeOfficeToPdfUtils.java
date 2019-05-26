@@ -24,7 +24,6 @@ public class AsposeOfficeToPdfUtils implements OfficeUtil{
             Object obj = clazz.newInstance();
             clazz.getMethod("setLicense", InputStream.class).invoke(obj, is);
             result = true;
-            is.close();
         } catch (Exception e) {
 			log.info(e);
         }finally {
@@ -74,10 +73,9 @@ public class AsposeOfficeToPdfUtils implements OfficeUtil{
             File pdfFile = new File(pdfPath);// 输出路径
 			fileOS = new FileOutputStream(pdfFile);
             doc.save(fileOS, SaveFormat.PDF);
-
             // pdf 到 png
 			PdfboxPdfToImageUtils.pdf2Image(pdfPath,imageDirectory,200,1);
-			log.info("ppt--pdf--png"); // 转化用时
+			log.info("word--pdf--png"); // 转化用时
         } catch (IOException e) {
 			log.info(e);
         } catch (Exception e) {
@@ -110,7 +108,7 @@ public class AsposeOfficeToPdfUtils implements OfficeUtil{
 
 			// pdf 到 png1
 			PdfboxPdfToImageUtils.pdf2Image(pdfPath,imageDirectory,200,1);
-			log.info("ppt--pdf--png:"); // 转化用时
+			log.info("excel--pdf--png:"); // 转化用时
 		} catch (IOException e) {
 			log.info(e);
 		} catch (Exception e) {

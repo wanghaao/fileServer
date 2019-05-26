@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ArtifactsWorkspaceSettings">
     <artifacts-to-build>
-      <artifact name="scu_note" />
+      <artifact name="scu_notehub" />
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
@@ -99,14 +99,14 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="4889" />
+          <entry key="java" value="5001" />
           <entry key="properties" value="83" />
           <entry key="xml" value="10" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="4889" />
+          <entry key="JAVA" value="5001" />
           <entry key="Properties" value="83" />
           <entry key="XML" value="10" />
         </counts>
@@ -135,7 +135,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/fileserver/utils/FileEntityHashArray.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="213">
-              <caret line="56" column="39" lean-forward="true" selection-start-line="56" selection-start-column="39" selection-end-line="56" selection-end-column="39" />
+              <caret line="56" column="39" selection-start-line="56" selection-start-column="39" selection-end-line="56" selection-end-column="39" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1372#1373#0" expanded="true" />
@@ -145,11 +145,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/fileserver/office/AsposeOfficeToPdfUtils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="495">
-              <caret line="83" column="24" lean-forward="true" selection-start-line="83" selection-start-column="24" selection-end-line="83" selection-end-column="24" />
+            <state relative-caret-position="168">
+              <caret line="75" column="24" lean-forward="true" selection-start-line="75" selection-start-column="24" selection-end-line="75" selection-end-column="24" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -181,13 +181,14 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/fileserver/office/PdfboxPdfToImageUtils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="217">
-              <caret line="79" column="9" lean-forward="true" selection-start-line="79" selection-start-column="9" selection-end-line="79" selection-end-column="9" />
+            <state relative-caret-position="216">
+              <caret line="9" column="43" lean-forward="true" selection-start-line="9" selection-start-column="43" selection-end-line="9" selection-end-column="43" />
               <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="e#3430#3431#0" expanded="true" />
+                <element signature="e#3477#3478#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -305,8 +306,8 @@
         <option value="$PROJECT_DIR$/src/main/java/fileserver/office/PdfboxPdfToImageUtils.java" />
         <option value="$PROJECT_DIR$/src/main/java/fileserver/controller/FileReceiverImpl.java" />
         <option value="$PROJECT_DIR$/src/main/test/test/FileReceiverImplTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/fileserver/office/AsposeOfficeToPdfUtils.java" />
         <option value="$PROJECT_DIR$/src/main/java/fileserver/utils/FileEntityHashArray.java" />
+        <option value="$PROJECT_DIR$/src/main/java/fileserver/office/AsposeOfficeToPdfUtils.java" />
       </list>
     </option>
   </component>
@@ -454,6 +455,19 @@
               <item name="CustomizedClass_DBServer" type="b2602c69:ProjectViewProjectNode" />
               <item name="CustomizedClass_DBServer" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="CustomizedClass_DBServer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CustomizedClass_DBServer" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="CustomizedClass_DBServer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CustomizedClass_DBServer" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="webapp" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -498,7 +512,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../Javajar/ezmorph-1.0.6.jar!/" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.456029" />
     <property name="settings.editor.selected.configurable" value="plugins.junitgenerator.application" />
@@ -518,6 +532,7 @@
       <recent name="" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\Documents\Desktop\CustomizedClass_DBServer\src\test\java" />
       <recent name="E:\IDEA\CustomizedClass_DBServer\src\main\resources\office" />
       <recent name="E:\IDEA\CustomizedClass_DBServer\src\main\java\file_server\aspose" />
     </key>
@@ -737,7 +752,7 @@
       <workItem from="1558842142412" duration="20000" />
       <workItem from="1558842203047" duration="41151000" />
       <workItem from="1558897819451" duration="9794000" />
-      <workItem from="1558907746963" duration="2706000" />
+      <workItem from="1558907746963" duration="3857000" />
     </task>
     <servers />
   </component>
@@ -774,13 +789,13 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="204016000" />
+    <option name="totallyTimeSpent" value="205167000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1552" height="840" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.36344537" visible="true" weight="0.22690763" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.36344537" visible="true" weight="0.24364123" />
       <window_info id="Structure" order="1" sideWeight="0.6365546" side_tool="true" weight="0.22423026" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -960,7 +975,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/test/test/FileReceiverImplTest.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/FileReceiverImplTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="193">
           <caret line="66" lean-forward="true" selection-start-line="66" selection-end-line="66" />
@@ -1158,20 +1173,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/fileserver/office/AsposeOfficeToPdfUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="495">
-          <caret line="83" column="24" lean-forward="true" selection-start-line="83" selection-start-column="24" selection-end-line="83" selection-end-column="24" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/fileserver/utils/FileEntityHashArray.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="213">
-          <caret line="56" column="39" lean-forward="true" selection-start-line="56" selection-start-column="39" selection-end-line="56" selection-end-column="39" />
+          <caret line="56" column="39" selection-start-line="56" selection-start-column="39" selection-end-line="56" selection-end-column="39" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1372#1373#0" expanded="true" />
@@ -1192,8 +1197,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/fileserver/office/PdfboxPdfToImageUtils.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="217">
-          <caret line="79" column="9" lean-forward="true" selection-start-line="79" selection-start-column="9" selection-end-line="79" selection-end-column="9" />
+        <state relative-caret-position="216">
+          <caret line="9" column="43" lean-forward="true" selection-start-line="9" selection-start-column="43" selection-end-line="9" selection-end-column="43" />
+          <folding>
+            <element signature="e#3430#3431#0" expanded="true" />
+            <element signature="e#3477#3478#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/fileserver/office/AsposeOfficeToPdfUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="75" column="24" lean-forward="true" selection-start-line="75" selection-start-column="24" selection-end-line="75" selection-end-column="24" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
