@@ -10,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
 import java.util.HashMap;
 
-
 public class FileCacheImpl implements FileCache {
     // 自己的数据结构
     private static FileEntityHashArray<String, FileEntity> fileEntityHashArray = new FileEntityHashArray<String, FileEntity>();
