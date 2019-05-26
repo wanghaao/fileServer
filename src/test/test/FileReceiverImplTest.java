@@ -1,22 +1,16 @@
 package test;
 
 import fileserver.controller.FileReceiverImpl;
-import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-
-import static org.junit.Assert.*;
 
 public class FileReceiverImplTest {
 
@@ -39,25 +33,25 @@ public class FileReceiverImplTest {
     @Test
     public void uploadImageAndOffices() throws IOException {
 
-        MockMultipartFile mockMultipartFile1 = new MockMultipartFile("test.xlsx", new FileInputStream(new File("/home/admin/test.xlsx")));
+        MockMultipartFile mockMultipartFile1 = new MockMultipartFile("test1.xlsx", new FileInputStream(new File("C:\\allFiles\\wanghao\\汪浩_科研能力加分表2016-2.xls")));
 
-        MockMultipartFile mockMultipartFile2 = new MockMultipartFile("test.png", new FileInputStream(new File("/home/admin/test.png")));
-        MockMultipartFile mockMultipartFile3 = new MockMultipartFile("test.pdf", new FileInputStream(new File("/home/admin/test.pdf")));
+        MockMultipartFile mockMultipartFile2 = new MockMultipartFile("test2.png", new FileInputStream(new File("C:\\allFiles\\wanghao\\demo1\\4_1.png")));
+        MockMultipartFile mockMultipartFile3 = new MockMultipartFile("test3.pdf", new FileInputStream(new File("C:\\allFiles\\wanghao\\demo1\\11.pdf")));
 
-        fileReceiver.uploadImageAndOffices(mockMultipartFile1,"wang");
-        fileReceiver.uploadImageAndOffices(mockMultipartFile2,"wang");
-        fileReceiver.uploadImageAndOffices(mockMultipartFile3,"wang");
+        fileReceiver.uploadImageAndOffices(mockMultipartFile1,"zhangyiwen");
+        fileReceiver.uploadImageAndOffices(mockMultipartFile2,"zhangyiwen");
+        fileReceiver.uploadImageAndOffices(mockMultipartFile3,"zhangyiwen");
 
     }
 
     @Test
     public void createDepository() {
-        fileReceiver.createDepository("wang");
+        fileReceiver.createDepository("wang22");
     }
 
     @Test
     public void createDirectory() {
-        fileReceiver.createDirectory("wang/demo","/dd");
+        fileReceiver.createDirectory("wang22","demo");
     }
 
     @Test
@@ -69,13 +63,13 @@ public class FileReceiverImplTest {
     public void downloadFile() {
         MockHttpServletRequest request = new MockHttpServletRequest();
         MockHttpServletResponse response = new MockHttpServletResponse();
-        fileReceiver.downloadFile("wang/123.txt",request,response);
+        fileReceiver.downloadFile("wanghao/demo1/4_1.png",request,response);
     }
 
     @Test
     public void getImageDataInBase64() {
-        fileReceiver.getImageDataInBase64("wang/aa.png","image");
-        fileReceiver.getImageDataInBase64("wang/aa.pdf", "office");
+        fileReceiver.getImageDataInBase64("wanghao/demo1/4_1.png","image");
+        fileReceiver.getImageDataInBase64("wanghao/demo1/11.pdf", "office");
     }
 
 }

@@ -17,7 +17,6 @@ public class FileProcessorUtils implements FileUtils{
     private static SimpleLog log = new SimpleLog("log");
     // 图片文件的  base64 编码
     public static FileEntity imageToDataInBase64(File file){
-
         String fileName = file.getName();
         String filePath = getTheFilePathFromPropertiesFile("allImagesDirectory")+fileName;
         InputStream inputStream = null;

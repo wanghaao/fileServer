@@ -16,7 +16,6 @@ public class DataToJsonUtils {
     public static String objectListToJson(List<?> list, int status){
         return "{"+"\""+"status"+"\""+":"+status+","+"\""+"data"+"\""+":"+ JSONArray.fromObject(list).toString()+"}";
     }
-
     public static String jsonNoStatusObject(Object object){
         return JSONObject.fromObject(object).toString();
     }

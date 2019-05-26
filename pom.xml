@@ -58,6 +58,9 @@
             <resource>
                 <directory>src/main/resources/spring</directory>
             </resource>
+            <resource>
+                <directory>src/main/resources/office</directory>
+            </resource>
         </resources>
     </build>
 
@@ -254,16 +257,6 @@
             <groupId>com.lowagie</groupId>
             <artifactId>itext</artifactId>
             <version>2.1.7</version>
-        </dependency>
-        <dependency>
-            <groupId>com.mchange</groupId>
-            <artifactId>mchange-commons-java</artifactId>
-            <version>0.2.11</version>
-        </dependency>
-        <dependency>
-            <groupId>com.mchange</groupId>
-            <artifactId>mchange-commons-java</artifactId>
-            <version>0.2.11</version>
         </dependency>
         <dependency>
             <groupId>com.mchange</groupId>
