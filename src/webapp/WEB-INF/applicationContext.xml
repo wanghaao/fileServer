@@ -27,7 +27,7 @@
                            http://cocoon.apache.org/schema/configurator http://cocoon.apache.org/schema/configurator/cocoon-configurator-1.0.1.xsd
                            http://cocoon.apache.org/schema/avalon http://cocoon.apache.org/schema/avalon/cocoon-avalon-1.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-  <context:component-scan base-package="file_server"/>
+  <context:component-scan base-package="fileserver"/>
 
   <!-- Activate Cocoon Spring Configurator -->
   <configurator:settings/>
