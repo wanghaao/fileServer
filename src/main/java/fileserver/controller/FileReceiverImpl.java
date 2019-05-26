@@ -20,7 +20,6 @@ import java.util.List;
 
 @Controller("fileReceiverImpl")
 public class FileReceiverImpl extends AbstractFileReceiver{
-
     private SimpleLog log = new SimpleLog("log");
     private String mainDirectory;
 

@@ -45,7 +45,7 @@ public class AsposeOfficeToPdfUtils implements OfficeUtil{
 	 * @param pdfPath
 	 * @throws Exception
 	 */
-	public static void officesToPdf(String filePath, String pdfPath,String imageDirectory) throws Exception {
+	public static void officesToPdf(String filePath, String pdfPath,String imageDirectory) {
 
 		if (filePath.endsWith("doc") || filePath.endsWith("docx")) {
 			wordToPdf(filePath, pdfPath,imageDirectory);
@@ -68,10 +68,11 @@ public class AsposeOfficeToPdfUtils implements OfficeUtil{
         if (!getLicense("com.aspose.words.License")) {
             return;
         }
+		FileOutputStream fileOS = null;
         try {
             Document doc = new Document(wordPath);// 原始word路径
             File pdfFile = new File(pdfPath);// 输出路径
-            FileOutputStream fileOS = new FileOutputStream(pdfFile);
+			fileOS = new FileOutputStream(pdfFile);
             doc.save(fileOS, SaveFormat.PDF);
 
             // pdf 到 png
@@ -79,7 +80,15 @@ public class AsposeOfficeToPdfUtils implements OfficeUtil{
 			log.info("ppt--pdf--png"); // 转化用时
         } catch (Exception e) {
 			log.info(e);
-        }
+        }finally {
+			if(fileOS!=null){
+				try {
+					fileOS.close();
+				} catch (IOException e) {
+					log.info(e);
+				}
+			}
+		}
     }
 
 	/**
@@ -87,22 +96,31 @@ public class AsposeOfficeToPdfUtils implements OfficeUtil{
 	 * @param pdfPath
 	 * @throws Exception
 	 */
-	private static void excelToPDF(String filePath, String pdfPath,String imageDirectory) throws Exception {
+	private static void excelToPDF(String filePath, String pdfPath,String imageDirectory) {
 		if (!getLicense("com.aspose.cells.License")) { // 验证License 若不验证则转化出的pdf文档会有水印产生
 			return;
 		}
+		FileOutputStream fileOS = null;
 		try {
 			Workbook wb = new Workbook(filePath);// 原始excel路径
-			FileOutputStream fileOS = new FileOutputStream(new File(pdfPath));
+			fileOS = new FileOutputStream(new File(pdfPath));
 			wb.save(fileOS, com.aspose.cells.SaveFormat.PDF);
-			fileOS.close();
 
 			// pdf 到 png1
 			PdfboxPdfToImageUtils.pdf2Image(pdfPath,imageDirectory,200,1);
 			log.info("ppt--pdf--png:"); // 转化用时
 		} catch (Exception e) {
 			log.info(e);
+		}finally {
+			if(fileOS!=null){
+				try {
+					fileOS.close();
+				} catch (IOException e) {
+					log.info(e);
+				}
+			}
 		}
+
 		
 	}
 	
@@ -115,18 +133,27 @@ public class AsposeOfficeToPdfUtils implements OfficeUtil{
 		if (!getLicense("com.aspose.slides.License")) { // 验证License 若不验证则转化出的pdf文档会有水印产生
 			return;
 		}
+		FileOutputStream fileOS = null;
 		try {
 			Presentation pres = new Presentation(filePath);
-			FileOutputStream fileOS = new FileOutputStream(new File(pdfPath));
+			fileOS = new FileOutputStream(new File(pdfPath));
 			pres.save(fileOS,com.aspose.slides.SaveFormat.Pdf);
-			fileOS.close();
 
 			// pdf 到 png
 			PdfboxPdfToImageUtils.pdf2Image(pdfPath,imageDirectory,200,1);
 			log.info("ppt--pdf--png:"); // 转化用时
 		} catch (Exception e) {
 			log.info(e);
+		}finally {
+			if(fileOS!=null){
+				try {
+					fileOS.close();
+				} catch (IOException e) {
+					log.info(e);
+				}
+			}
 		}
+
 
 	}
 }

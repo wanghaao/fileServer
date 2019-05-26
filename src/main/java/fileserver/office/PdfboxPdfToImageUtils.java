@@ -79,7 +79,8 @@ public class PdfboxPdfToImageUtils implements OfficeUtil {
             log.info(e);
         }
         if(tag==1){
-            file.delete();
+            boolean a = file.delete();
+            log.info("delete the pdf : " + a);
         }
     }
 
