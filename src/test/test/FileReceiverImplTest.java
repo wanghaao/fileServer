@@ -44,20 +44,20 @@ public class FileReceiverImplTest {
 
     }
 
-    @Test
-    public void createDepository() {
-        fileReceiver.createDepository("wang22");
-    }
-
-    @Test
-    public void createDirectory() {
-        fileReceiver.createDirectory("wang22","demo");
-    }
-
-    @Test
-    public void searchDirectory() {
-        fileReceiver.searchDirectory("wang");
-    }
+//    @Test
+//    public void createDepository() {
+//        fileReceiver.createDepository("wang22");
+//    }
+//
+//    @Test
+//    public void createDirectory() {
+//        fileReceiver.createDirectory("wang22","demo");
+//    }
+//
+//    @Test
+//    public void searchDirectory() {
+//        fileReceiver.searchDirectory("wang");
+//    }
 
     @Test
     public void downloadFile() {

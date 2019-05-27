@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller("fileReceiverImpl")
-public class FileReceiverImpl extends AbstractFileReceiver{
+public class FileReceiverImpl {
     private SimpleLog log = new SimpleLog("log");
     private String mainDirectory;
 
@@ -38,7 +39,11 @@ public class FileReceiverImpl extends AbstractFileReceiver{
      */
     @RequestMapping(value = "/upload/imagesAndOffices",method = RequestMethod.POST)
     @ResponseBody
-    public String uploadImageAndOffices(@Param("file") MultipartFile file,@Param("path")String path) {
+    public String uploadImageAndOffices(HttpServletResponse response, @RequestParam("file") MultipartFile file,@RequestParam("path")String path) {
+        response.addHeader("Access-Control-Allow-Origin","*");
+        response.addHeader("Access-Control-Allow-Methods","POST");
+        response.addHeader("Access-Control-Allow-Headers","x-requested-with,content-type");
+
         FileCacheImpl fileCacheImpl  = new FileCacheImpl();
         // 获取文件名
         String fileName = file.getOriginalFilename();
@@ -50,17 +55,21 @@ public class FileReceiverImpl extends AbstractFileReceiver{
         fileCacheImpl.storeNewFile(file,storePath);
         return "1";// 硬盘的真实文件名
     }
-
     /***
      * 创建 仓库 的目录
-     * @param depository
+     * @param
      * @return
      */
+    //, @RequestParam("depository") String depository
     @RequestMapping(value = "/create/depository",method = RequestMethod.POST)
     @ResponseBody
-    public String createDepository(@Param("depository") String depository ) {
+    public String createDepository(HttpServletRequest request,HttpServletResponse response) {
+        response.addHeader("Access-Control-Allow-Origin","*");
+        response.addHeader("Access-Control-Allow-Methods","GET,POST,OPTIONS");
+        response.addHeader("Access-Control-Allow-Headers","x-requested-with,content-type");
 
-        String depositoryDirectory = getMainDirectory()+ File.separator + depository;
+        String depositoryDirectory = getMainDirectory()+ File.separator + request.getParameter("depository");
+        System.out.println(request.getParameter("depository"));
         File dir = new File(depositoryDirectory);
         if (!dir.exists()) {
             dir.mkdirs();
@@ -77,7 +86,11 @@ public class FileReceiverImpl extends AbstractFileReceiver{
      */
     @RequestMapping(value = "/create/directory",method = RequestMethod.POST)
     @ResponseBody
-    public String createDirectory(@Param("directories") String directories,@Param("newDirectory")String newDirectory ) {
+    public String createDirectory(HttpServletResponse response,@RequestParam("directories") String directories,@Param("newDirectory")String newDirectory) {
+        response.addHeader("Access-Control-Allow-Origin","*");
+        response.addHeader("Access-Control-Allow-Methods","POST");
+        response.addHeader("Access-Control-Allow-Headers","x-requested-with,content-type");
+
         String depositoryDirectory = getMainDirectory()+ File.separator + directories + File.separator + newDirectory;
         File dir = new File(depositoryDirectory);
         if (!dir.exists()) {
@@ -87,7 +100,6 @@ public class FileReceiverImpl extends AbstractFileReceiver{
             return "0";
         }
     }
-
     /**
      * 查询 指定目录下的 文件列表,嵌套文件 的 路径
      * @param directories
@@ -95,7 +107,11 @@ public class FileReceiverImpl extends AbstractFileReceiver{
      */
     @RequestMapping(value = "/search/directory",method = RequestMethod.POST)
     @ResponseBody
-    public String searchDirectory(@Param("directories") String directories) {
+    public String searchDirectory(HttpServletResponse response,@Param("directories") String directories) {
+        response.addHeader("Access-Control-Allow-Origin","*");
+        response.addHeader("Access-Control-Allow-Methods","POST");
+        response.addHeader("Access-Control-Allow-Headers","x-requested-with,content-type");
+
         String directory = getMainDirectory() +"\\"+ directories;
         File file = new File(directory);
         List<String> list = new ArrayList<String>();
@@ -179,7 +195,11 @@ public class FileReceiverImpl extends AbstractFileReceiver{
      */
     @RequestMapping(value = "/preView/files",method = RequestMethod.POST)
     @ResponseBody
-    public String getImageDataInBase64(@Param("path") String path,@Param("tag") String tag){
+    public String getImageDataInBase64(@Param("path") String path,@Param("tag") String tag,HttpServletResponse response){
+        response.addHeader("Access-Control-Allow-Origin","*");
+        response.addHeader("Access-Control-Allow-Methods","POST");
+        response.addHeader("Access-Control-Allow-Headers","x-requested-with,content-type");
+
         FileCacheImpl fileCacheImpl  = new FileCacheImpl();
         String realFileName = path.replaceAll("/","-");
         log.info(path + "--------"+realFileName);
@@ -206,6 +226,5 @@ public class FileReceiverImpl extends AbstractFileReceiver{
             return null;
         }
     }
-
 
 }

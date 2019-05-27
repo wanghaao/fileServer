@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="scu_notes">
+    <output-path>$PROJECT_DIR$/out/artifacts/scu_notes</output-path>
+    <root id="archive" name="scu_notes.war">
+      <element id="artifact" artifact-name="scu_notehub" />
+    </root>
+  </artifact>
+</component>

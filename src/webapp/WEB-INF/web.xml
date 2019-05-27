@@ -62,7 +62,6 @@
     </init-param>
 
   </filter>
-
   <filter-mapping>
     <filter-name>encodingFilter</filter-name>
     <url-pattern>/*</url-pattern>
@@ -76,7 +75,6 @@
   <listener>
     <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
   </listener>
-
 
   <!-- Spring MVC 核心配置开始 -->
   <servlet>
@@ -92,7 +90,6 @@
     <load-on-startup>1</load-on-startup>
     <!--<async-supported>true</async-supported>-->
   </servlet>
-
 
   <!-- 拦截设置 -->
   <servlet-mapping>
